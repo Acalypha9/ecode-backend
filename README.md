@@ -2,6 +2,12 @@
 
 This is the backend REST API for the Simple Personal Task Manager application, built as part of the E-CODE HIMIT PENS Backend Developer recruitment challenge.
 
+
+## Live Demo
+
+The API is deployed and fully integrated with a Next.js frontend application.
+- **Web Application**: [https://task.acalypha.my.id/](https://task.acalypha.my.id/)
+- **Live API Base URL**: `https://api.acalypha.my.id`
 ## Features
 - **User Authentication**: Secure signup and login using JSON Web Tokens (JWT).
 - **Task Management**: Full CRUD operations for tasks.
