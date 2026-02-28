@@ -84,3 +84,100 @@ This is the backend REST API for the Simple Personal Task Manager application, b
 - `npm run dev`: Starts the development server using `tsx`.
 - `npm run build`: Compiles the TypeScript code to standard JavaScript in the `dist` directory.
 - `npm start`: Runs the compiled JavaScript from the `dist` directory (must run `build` first).
+
+## Testing with Postman
+
+### 1. Health Check
+- **GET** `http://localhost:4000/health`
+
+### 2. Register
+- **POST** `http://localhost:4000/api/auth/register`
+- Body → raw → JSON:
+  ```json
+  {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "password123"
+  }
+  ```
+- Response:
+  ```json
+  {
+    "success": true,
+    "message": "User registered successfully",
+    "data": {
+      "user": {
+        "id": "uuid",
+        "name": "John Doe",
+        "email": "john@example.com",
+        "createdAt": "2026-02-28T00:00:00.000Z"
+      },
+      "token": "eyJhbGciOiJIUzI1NiIs..."
+    }
+  }
+  ```
+
+### 3. Login
+- **POST** `http://localhost:4000/api/auth/login`
+- Body → raw → JSON:
+  ```json
+  {
+    "email": "john@example.com",
+    "password": "password123"
+  }
+  ```
+- Copy the `token` from the response for authenticated requests.
+
+### 4. Authenticated Requests
+
+After login, set the token in Postman:
+1. Go to the **Authorization** tab
+2. Type: **Bearer Token**
+3. Paste the token you copied
+
+#### Get All Tasks
+- **GET** `http://localhost:4000/api/tasks`
+- Query Params (optional): `status`, `priority`, `search`, `sortBy`, `sortOrder`, `page`, `limit`
+- Example: `http://localhost:4000/api/tasks?status=PENDING&priority=HIGH&search=belajar&sortBy=createdAt&sortOrder=desc&page=1&limit=10`
+
+#### Get Task by ID
+- **GET** `http://localhost:4000/api/tasks/:id`
+
+#### Create Task
+- **POST** `http://localhost:4000/api/tasks`
+- Body → raw → JSON:
+  ```json
+  {
+    "title": "Belajar Express",
+    "description": "Pelajari Express 5 dan TypeScript",
+    "priority": "HIGH",
+    "dueDate": "2026-03-15T00:00:00.000Z"
+  }
+  ```
+
+#### Update Task
+- **PUT** `http://localhost:4000/api/tasks/:id`
+- Body → raw → JSON:
+  ```json
+  {
+    "title": "Updated Task",
+    "status": "COMPLETED"
+  }
+  ```
+
+#### Delete Task
+- **DELETE** `http://localhost:4000/api/tasks/:id`
+
+#### Get Profile
+- **GET** `http://localhost:4000/api/profile`
+
+#### Update Profile
+- **PUT** `http://localhost:4000/api/profile`
+- Body → raw → JSON:
+  ```json
+  {
+    "name": "Jane Doe",
+    "currentPassword": "password123",
+    "newPassword": "newpassword456"
+  }
+  ```
