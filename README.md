@@ -80,6 +80,105 @@ This is the backend REST API for the Simple Personal Task Manager application, b
 - `PUT /api/tasks/:id` - Update an existing task
 - `DELETE /api/tasks/:id` - Delete a task
 
+---
+
+## Detailed API Documentation
+
+All successful responses follow this format:
+```json
+{
+  "success": true,
+  "message": "Action completed successfully",
+  "data": { ... }
+}
+```
+
+All error responses follow this format:
+```json
+{
+  "success": false,
+  "message": "Error message description"
+}
+```
+
+### Authentication
+
+#### `POST /api/auth/register`
+Create a new user account.
+- **Body**
+  - `name` (string, required): Minimum 2 characters.
+  - `email` (string, required): Valid email address.
+  - `password` (string, required): Minimum 6 characters.
+- **Success**: 201 Created. Returns user object and JWT token.
+
+#### `POST /api/auth/login`
+Login and receive a JWT.
+- **Body**
+  - `email` (string, required)
+  - `password` (string, required)
+- **Success**: 200 OK. Returns user object and JWT token.
+
+### Tasks
+*Note: All endpoints require `Authorization: Bearer <token>` header.*
+
+#### `GET /api/tasks`
+Get paginated tasks belonging to the current user.
+- **Query Parameters**:
+  - `page` (number): Page number (default: 1)
+  - `limit` (number): Items per page (default: 10)
+  - `status` (string): Filter by `PENDING`, `IN_PROGRESS`, `COMPLETED`, `CANCELLED`
+  - `priority` (string): Filter by `LOW`, `MEDIUM`, `HIGH`
+  - `search` (string): Search in title or description
+  - `sortBy` (string): Field to sort by (default: `createdAt`)
+  - `sortOrder` (string): `asc` or `desc` (default: `desc`)
+- **Success**: 200 OK. Returns array of tasks and pagination metadata.
+
+#### `GET /api/tasks/:id`
+Get details of a specific task.
+- **Params**: `id` (UUID of the task)
+- **Success**: 200 OK. Returns task object.
+- **Error**: 404 Not Found if task doesn't exist or belongs to another user.
+
+#### `POST /api/tasks`
+Create a new task.
+- **Body**
+  - `title` (string, required): Minimum 3 characters.
+  - `description` (string, optional)
+  - `priority` (string, optional): `LOW`, `MEDIUM`, `HIGH` (default: `MEDIUM`)
+  - `dueDate` (ISO 8601 Date String, optional)
+- **Success**: 201 Created. Returns the created task.
+
+#### `PUT /api/tasks/:id`
+Update an existing task.
+- **Params**: `id` (UUID of the task)
+- **Body** (all optional):
+  - `title` (string)
+  - `description` (string)
+  - `status` (string): `PENDING`, `IN_PROGRESS`, `COMPLETED`, `CANCELLED`
+  - `priority` (string): `LOW`, `MEDIUM`, `HIGH`
+  - `dueDate` (ISO 8601 Date String)
+- **Success**: 200 OK. Returns the updated task.
+
+#### `DELETE /api/tasks/:id`
+Delete a task.
+- **Params**: `id` (UUID of the task)
+- **Success**: 200 OK. Returns deletion confirmation.
+
+### Profile
+*Note: All endpoints require `Authorization: Bearer <token>` header.*
+
+#### `GET /api/profile`
+Get current user profile information.
+- **Success**: 200 OK. Returns user details.
+
+#### `PUT /api/profile`
+Update user name and/or password.
+- **Body**:
+  - `name` (string, optional): Minimum 2 characters.
+  - `currentPassword` (string, required if changing password)
+  - `newPassword` (string, required if changing password): Minimum 6 characters.
+- **Success**: 200 OK. Returns updated user profile.
+
 ## Scripts
 - `npm run dev`: Starts the development server using `tsx`.
 - `npm run build`: Compiles the TypeScript code to standard JavaScript in the `dist` directory.
