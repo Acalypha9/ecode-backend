@@ -8,6 +8,8 @@ This is the backend REST API for the Simple Personal Task Manager application, b
 The API is deployed and fully integrated with a Next.js frontend application.
 - **Web Application**: [https://task.acalypha.my.id/](https://task.acalypha.my.id/)
 - **Live API Base URL**: `https://api.acalypha.my.id`
+- **API Health Check**: [https://api.acalypha.my.id/health](https://api.acalypha.my.id/health)
+
 ## Features
 - **User Authentication**: Secure signup and login using JSON Web Tokens (JWT).
 - **Task Management**: Full CRUD operations for tasks.
